@@ -1,42 +1,51 @@
+# Name of the workflow
 name: Python CI
 
+# Define the events that trigger the workflow
 on:
   push:
     branches:
-      - main
+      - main  # Trigger on pushes to the main branch
   pull_request:
     branches:
-      - main
+      - main  # Trigger on pull requests to the main branch
 
 jobs:
+  # Define a job named lint_and_format
   lint_and_format:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # Run the job on the latest version of Ubuntu
 
     steps:
+      # Step to check out the code from the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Step to set up Python 3.11
       - name: Set up Python 3.11
         uses: actions/setup-python@v4
         with:
-          python-version: 3.11
+          python-version: 3.11  # Specify the version of Python to use
 
+      # Step to install the required dependencies
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install black ruff
+          python -m pip install --upgrade pip  # Upgrade pip
+          pip install black ruff  # Install Black and Ruff for code formatting and linting
 
+      # Step to verify that the packages were installed correctly
       - name: Verify installed packages
         run: |
-          pip show black
-          pip show ruff
+          pip show black  # Show details of the Black installation
+          pip show ruff  # Show details of the Ruff installation
 
+      # Step to run Black and check the code formatting
       - name: Run Black to check formatting
         run: |
-          black --check .
+          black --check .  # Check code formatting with Black
         continue-on-error: true  # Optional: Continue even if Black finds issues
 
+      # Step to run Ruff and check the code quality
       - name: Run Ruff for linting
         run: |
-          ruff .
+          ruff .  # Check code quality with Ruff
         continue-on-error: true  # Optional: Continue even if Ruff finds issues
